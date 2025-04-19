@@ -12,7 +12,11 @@ const apiRoutes = require('./routes/api');
 
 // Middleware
 app.use(cors({
-  origin: ['https://ousl-gpa-evaluation-system-client.vercel.app', 'http://localhost:3000'],
+  origin: [
+    'https://ousl-gpa-evaluation-system-client.vercel.app', 
+    'http://localhost:3000',
+    // Add your Vercel client URL if different
+  ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));

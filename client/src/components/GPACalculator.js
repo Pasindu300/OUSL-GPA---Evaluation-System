@@ -60,26 +60,29 @@ const GPACalculator = () => {
       .map(course => course.courseCode);
   };
 
-  // Placeholder for API call - in actual implementation this would fetch from backend
-  const fetchCourses = (spec) => {
-    setLoading(true);
-    fetch(`/api/courses/${spec}`)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Failed to fetch courses');
-        }
-        return response.json();
-      })
-      .then(data => {
-        setCourses(data);
-        setLoading(false);
-      })
-      .catch(err => {
-        console.error('Error fetching courses:', err);
-        setError('Failed to load courses. Please try again.');
-        setLoading(false);
-      });
-  };
+// Update the fetchCourses function in GPACalculator.js
+const fetchCourses = (spec) => {
+  setLoading(true);
+  // Use the environment variable for API URL
+  const apiUrl = process.env.REACT_APP_API_URL || '/api';
+  
+  fetch(`${apiUrl}/courses/${spec}`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Failed to fetch courses');
+      }
+      return response.json();
+    })
+    .then(data => {
+      setCourses(data);
+      setLoading(false);
+    })
+    .catch(err => {
+      console.error('Error fetching courses:', err);
+      setError('Failed to load courses. Please try again.');
+      setLoading(false);
+    });
+};
 
   // Handle specialization change
   const handleSpecializationChange = (e) => {
@@ -167,14 +170,15 @@ const GPACalculator = () => {
       }))
     };
 
-    // Make API call to calculate GPA
-    fetch('/api/calculate-gpa', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(coursesData),
-    })
+    // Also update the calculateGPA function's fetch call
+// Make API call to calculate GPA
+fetch(`${process.env.REACT_APP_API_URL || '/api'}/calculate-gpa`, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(coursesData),
+})
     .then(response => {
       if (!response.ok) {
         throw new Error('Failed to calculate GPA');
