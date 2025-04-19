@@ -10,24 +10,33 @@ const PORT = process.env.PORT || 5000;
 // Import routes
 const apiRoutes = require('./routes/api');
 
-// Middleware
-app.use(cors());
+// Configure CORS for Vercel deployment
+app.use(cors({
+  origin: process.env.NODE_ENV === 'production' 
+    ? ['https://https://ousl-gpa-evaluation-system-client.vercel.app/', 'https://https://ousl-gpa-evaluation-system-server.vercel.app/'] 
+    : 'http://localhost:3000',
+  credentials: true
+}));
+
 app.use(bodyParser.json());
 
 // Use API routes
 app.use('/api', apiRoutes);
 
-// Serve static assets if in production
+// For Vercel serverless deployment
 if (process.env.NODE_ENV === 'production') {
-  // Set static folder
-  app.use(express.static(path.join(__dirname, '../client/build')));
-
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
+  // Just handle API requests, don't try to serve static files
+  app.get('/', (req, res) => {
+    res.json({ message: 'GPA Calculator API is running' });
   });
 }
 
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+// Export for Vercel serverless function
+module.exports = app;
+
+// Only listen when running directly (not on Vercel)
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+}
