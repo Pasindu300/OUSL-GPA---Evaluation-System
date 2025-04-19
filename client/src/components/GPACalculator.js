@@ -42,7 +42,7 @@ const GPACalculator = () => {
   // Helper function to get credit value from course code
   const getCreditValue = (courseCode) => {
     if (!courseCode || courseCode.length < 6) return 0;
-    const creditDigit = courseCode.charAt(5);
+    const creditDigit = courseCode.charAt(4);
     return parseInt(creditDigit);
   };
 
