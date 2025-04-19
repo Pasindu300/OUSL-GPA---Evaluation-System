@@ -10,33 +10,34 @@ const PORT = process.env.PORT || 5000;
 // Import routes
 const apiRoutes = require('./routes/api');
 
-// Configure CORS for Vercel deployment
+// Middleware
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? ['https://https://ousl-gpa-evaluation-system-client.vercel.app/', 'https://https://ousl-gpa-evaluation-system-server.vercel.app/'] 
-    : 'http://localhost:3000',
+  origin: ['https://ousl-gpa-evaluation-system-client.vercel.app', 'http://localhost:3000'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true
 }));
-
 app.use(bodyParser.json());
+
+// Root route
+app.get('/', (req, res) => {
+  res.json({ message: 'GPA Calculator API is running. Use /api/courses/{specialization} to get course data.' });
+});
 
 // Use API routes
 app.use('/api', apiRoutes);
 
-// For Vercel serverless deployment
-if (process.env.NODE_ENV === 'production') {
-  // Just handle API requests, don't try to serve static files
-  app.get('/', (req, res) => {
-    res.json({ message: 'GPA Calculator API is running' });
-  });
-}
+// Error handling
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ message: 'Server error', error: err.message });
+});
 
-// Export for Vercel serverless function
-module.exports = app;
-
-// Only listen when running directly (not on Vercel)
+// Start the server
 if (process.env.NODE_ENV !== 'production') {
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });
 }
+
+// Export for Vercel serverless function
+module.exports = app;
