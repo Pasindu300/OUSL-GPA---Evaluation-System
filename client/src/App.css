@@ -1,0 +1,32 @@
+.App {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  body {
+    background-color: #f5f7fa;
+    margin: 0;
+  }
+  
+  /* General styling */
+  h1, h2, h3, h4, h5, h6 {
+    color: #333;
+  }
+  
+  /* Form element styling */
+  select, input {
+    font-size: 14px;
+    border-radius: 4px;
+  }
+  
+  /* Button styling */
+  button {
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  button:hover {
+    opacity: 0.9;
+  }
